@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const tidelevelSchema = new Schema({
-    time: Date,
-    level: Number
+    t: Date,
+    v: Number
 });
 
 const Tidelevel = mongoose.model('Tidelevel', tidelevelSchema);

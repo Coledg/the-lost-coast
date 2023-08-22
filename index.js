@@ -20,7 +20,8 @@ app.get('/retrieve-data', async (req, res) => {
 })
 
 app.get('/view-data', async (req, res) => {
-    await retrieveSafePassingTime()
+    const data = await retrieveSafePassingTime();
+    data.map(d => console.log(d.t, d.v));
     res.send('Done viewing data');
 })
 
