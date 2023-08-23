@@ -3,8 +3,10 @@ mongoose.connect('mongodb://127.0.0.1:27017/tidal-data');
 const Tidelevel = require('../models/tidelevel');
 
 const populateData = async (data) => {
-    await Tidelevel.deleteMany({});
-    await Tidelevel.insertMany(data, { ordered: true });
+    const dataCount = await Tidelevel.count();
+    if (dataCount === 0) {
+        await Tidelevel.insertMany(data, { ordered: true });
+    }
 }
 
 const retrieveSafePassingTime = async () => {

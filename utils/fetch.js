@@ -9,7 +9,7 @@ const tidalDataGetter = async (stationId, beginDate, endDate) => {
             + '&datum=MLLW'
             + '&units=english'
             + '&time_zone=lst_ldt'
-            + '&interval=15'
+            + '&interval=5'
             + '&format=json'
             + '&application=UCSC_AStudent');
         const data = await res.json()
