@@ -1,10 +1,10 @@
 const shelterCoveID = '9418024';
-const tidalDataGetter = async (stationId, beginDate, endDate) => {
+const tidalDataGetter = async (stationId, beginDate, range) => {
     try {
         const res = await fetch('https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?'
             + `station=${stationId}`
             + `&begin_date=${beginDate}`
-            + `&end_date=${endDate}`
+            + `&range=${range}`
             + `&product=predictions`
             + '&datum=MLLW'
             + '&units=english'
