@@ -17,16 +17,15 @@ const retrieveSafePassingTime = async (startDate, endDate) => {
     return data;
 }
 
-const groupdDataByRange = (data) => {
+const groupdDataByRange = (data, numOfDays) => {
 
 }
 
 const findIntervals = (data) => {
     const intervals = new Array();
-    data.map(d => console.log(d.t, d.v));
     for (let i = 1; i < data.length - 1; i++) {
         if (data[i].v > data[i - 1].v && data[i].v > data[i + 1].v) {
-            const isStart = data[i + 1].t - data[i].t === 5 * 60 * 1000;
+            const isStart = data[i + 1].t - data[i].t === 15 * 60 * 1000;
             if (isStart) {
                 intervals.push(i - 1);
                 intervals.push(i);

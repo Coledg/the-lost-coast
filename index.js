@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const { populateData, retrieveSafePassingTime, findIntervals } = require('./utils/database');
+const { formatResult } = require('./utils/general');
 
 app.use(express.urlencoded({ extended: true }));
 app.set('views', path.join(__dirname, 'views'));
@@ -22,12 +23,14 @@ app.get('/retrieve-data', async (req, res) => {
     const intervalsEndpoints = findIntervals(data);
     const intervals = new Array();
     for (let i = 0; i < intervalsEndpoints.length; i += 2) {
-        intervals.push({
-            start: data[intervalsEndpoints[i]].t,
-            end: data[intervalsEndpoints[i + 1]].t
-        })
+        intervals.push(
+            formatResult({
+                start: data[intervalsEndpoints[i]].t,
+                end: data[intervalsEndpoints[i + 1]].t,
+                time: Math.abs(data[intervalsEndpoints[i + 1]].t - data[intervalsEndpoints[i]].t)
+            }))
     }
-    intervalsEndpoints.map(i => console.log(data[i].v));
+
     res.render('intervals', { intervals });
 })
 
