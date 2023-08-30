@@ -1,8 +1,8 @@
 const express = require('express');
 const app = express();
 const path = require('path');
-const { populateData, retrieveSafePassingTime, findIntervals } = require('./utils/database');
-const { formatResult } = require('./utils/general');
+const { populateData, retrieveSafePassingTime, findIntervals, groupDataByRange } = require('./utils/database');
+const { getSafeIntervals } = require('./utils/general');
 
 app.use(express.urlencoded({ extended: true }));
 app.set('views', path.join(__dirname, 'views'));
@@ -20,18 +20,10 @@ app.get('/input', async (req, res) => {
 app.get('/retrieve-data', async (req, res) => {
     const { startDate, endDate } = req.query;
     const data = await retrieveSafePassingTime(startDate, endDate);
-    const intervalsEndpoints = findIntervals(data);
-    const intervals = new Array();
-    for (let i = 0; i < intervalsEndpoints.length; i += 2) {
-        intervals.push(
-            formatResult({
-                start: data[intervalsEndpoints[i]].t,
-                end: data[intervalsEndpoints[i + 1]].t,
-                time: Math.abs(data[intervalsEndpoints[i + 1]].t - data[intervalsEndpoints[i]].t)
-            }))
-    }
-
-    res.render('intervals', { intervals });
+    const peaks = findIntervals(data);
+    const intervals = getSafeIntervals(data, peaks);
+    const groupedIntervals = groupDataByRange(intervals);
+    res.render('intervals', { groupedIntervals });
 })
 
 app.listen(3000, () => {
