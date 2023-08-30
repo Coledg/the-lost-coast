@@ -22,25 +22,6 @@ const retrieveSafePassingTime = async (startDate, endDate) => {
     return data;
 }
 
-// const groupdDataByRange = (data, numOfDays = 3) => {
-//     const intervals = new Array();
-//     for (let i = 0; i < data.length - 2; i++) {
-//         const maxRange = new Date(data[i].t);
-//         maxRange.setDate(data[i].t.getDate() + numOfDays);
-//         console.log(data[i].t, maxRange);
-//         const currentInterval = new Array();
-//         for (let j = i; data[j] && data[j].t < maxRange; j++) {
-//             currentInterval.push(data[j])
-//         }
-//         intervals.push(currentInterval);
-//         const nextDay = new Date(data[i].t);
-//         nextDay.setUTCHours(0, 0, 0, 0);
-//         nextDay.setDate(data[i].t.getDate() + 1);
-//         while (data[i].t <= nextDay) i++;
-//     }
-//     return intervals;
-// }
-
 const groupDataByRange = (data, numOfDays = 3) => {
     const endDate = getDateInUTC(new Date(data[data.length - 1].start), 1 - numOfDays);
     const intervals = new Array();
@@ -48,8 +29,15 @@ const groupDataByRange = (data, numOfDays = 3) => {
         const endIntervalDate = getDateInUTC(new Date(data[i].start), numOfDays);
 
         const miniIntervals = new Array();
-        for (let j = i; new Date(data[j].end) < endIntervalDate; j++) {
-            miniIntervals.push(data[j]);
+        for (let j = i; data[j] && new Date(data[j].start) < endIntervalDate; j++) {
+            if (new Date(data[j].end) > endIntervalDate) {
+                const filtered = { ...data[j] };
+                filtered.end = endIntervalDate.toLocaleString();
+                miniIntervals.push(filtered);
+            } else {
+                miniIntervals.push(data[j]);
+            }
+
         }
         intervals.push(miniIntervals);
 
@@ -61,9 +49,10 @@ const groupDataByRange = (data, numOfDays = 3) => {
 
 const findIntervals = (data) => {
     const peaks = new Array();
+    const fifteenMins = 15 * 60 * 1000;
     for (let i = 1; i < data.length - 1; i++) {
         if (data[i].v > data[i - 1].v && data[i].v > data[i + 1].v) {
-            if (data[i + 1].t - data[i].t === 15 * 60 * 1000) {
+            if (data[i + 1].t - data[i].t === fifteenMins) {
                 peaks.push(i);
             } else {
                 peaks.push(i + 1);

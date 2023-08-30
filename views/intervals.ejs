@@ -14,7 +14,12 @@
         <h3 class="text-primary">Safe intervals for input range</h3>
         <% for (let interval of groupedIntervals) { %>
             <ul>
-                Intervals
+                <b>
+                    <% const idxStart=interval[0].start.indexOf(',') %>
+                        Start <%= interval[0].start.slice(0, idxStart) %>
+                            <% const idxEnd=interval[interval.length - 1].start.indexOf(',') %>
+                                - End <%= interval[interval.length - 1].start.slice(0, idxEnd) %>
+                </b>
                 <% for (let i of interval) { %>
                     <li>
                         <%= i.start %> - <%= i.end %> - Duration: <%= i.time %>
