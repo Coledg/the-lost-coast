@@ -23,7 +23,7 @@ const retrieveSafePassingTime = async (startDate, endDate) => {
 }
 
 const groupDataByRange = (data, numOfDays = 3) => {
-    const endDate = getDateInUTC(new Date(data[data.length - 1].start), 1 - numOfDays);
+    const endDate = getDateInUTC(new Date(data[data.length - 1].start), 2 - numOfDays);
     const intervals = new Array();
     for (let i = 0; new Date(data[i].end) < endDate;) {
         const endIntervalDate = getDateInUTC(new Date(data[i].start), numOfDays);
