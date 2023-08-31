@@ -1,16 +1,16 @@
-const express = require('express');
+import express from 'express';
 const app = express();
-const path = require('path');
-const { populateData, retrieveSafePassingTime, findIntervals, groupDataByRange } = require('./utils/database');
-const { getSafeIntervals } = require('./utils/general');
+import path from 'path';
+const __dirname = path.resolve();
+import { populateData, retrieveSafePassingTime, findIntervals, groupDataByRange } from './utils/database.mjs';
+import { getSafeIntervals } from './utils/general.mjs';
 
 app.use(express.urlencoded({ extended: true }));
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+app.use(express.static(path.join(__dirname, 'dist')));
 
 app.get('/tide-level', async (req, res) => {
     await populateData();
-    res.render('home');
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 })
 
 app.get('/input', async (req, res) => {

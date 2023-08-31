@@ -1,5 +1,5 @@
-const shelterCoveID = '9418024';
-const tidalDataGetter = async (stationId, beginDate, range) => {
+export const shelterCoveID = '9418024';
+export const tidalDataGetter = async (stationId, beginDate, range) => {
     try {
         const res = await fetch('https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?'
             + `station=${stationId}`
@@ -18,5 +18,3 @@ const tidalDataGetter = async (stationId, beginDate, range) => {
         console.log("Error getting data", err);
     }
 }
-
-module.exports = { shelterCoveID, tidalDataGetter };

@@ -1,10 +1,10 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 mongoose.connect('mongodb://127.0.0.1:27017/tidal-data');
-const Tidelevel = require('../models/tidelevel');
-const { shelterCoveID, tidalDataGetter } = require('./fetch')
-const { getDateInUTC } = require('./general')
+import { Tidelevel } from '../models/tidelevel.mjs';
+import { shelterCoveID, tidalDataGetter } from './fetch.mjs';
+import { getDateInUTC } from './general.mjs';
 
-const populateData = async () => {
+export const populateData = async () => {
     const beginDate = new Date();
     const beginDateStr = (beginDate.toISOString()).slice(0, 10).replaceAll('-', '');
     const range = '8760';
@@ -14,7 +14,7 @@ const populateData = async () => {
     await Tidelevel.insertMany(data, { ordered: true });
 }
 
-const retrieveSafePassingTime = async (startDate, endDate) => {
+export const retrieveSafePassingTime = async (startDate, endDate) => {
     const startDateInUTC = getDateInUTC(new Date(startDate));
     const endDateInUTC = getDateInUTC(new Date(endDate), 1);
 
@@ -22,7 +22,7 @@ const retrieveSafePassingTime = async (startDate, endDate) => {
     return data;
 }
 
-const groupDataByRange = (data, numOfDays = 3) => {
+export const groupDataByRange = (data, numOfDays = 3) => {
     const endDate = getDateInUTC(new Date(data[data.length - 1].start), 2 - numOfDays);
     const intervals = new Array();
     for (let i = 0; new Date(data[i].end) < endDate;) {
@@ -47,7 +47,7 @@ const groupDataByRange = (data, numOfDays = 3) => {
     return intervals;
 }
 
-const findIntervals = (data) => {
+export const findIntervals = (data) => {
     const peaks = new Array();
     const fifteenMins = 15 * 60 * 1000;
     for (let i = 1; i < data.length - 1; i++) {
@@ -61,5 +61,3 @@ const findIntervals = (data) => {
     }
     return peaks;
 }
-
-module.exports = { populateData, retrieveSafePassingTime, findIntervals, groupDataByRange };

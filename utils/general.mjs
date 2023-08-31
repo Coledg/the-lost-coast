@@ -9,7 +9,7 @@ const formatTimeToStr = (time) => {
     return `${String(time.h).padStart(2, '0')}h${String(time.m).padStart(2, '0')}m`;
 }
 
-const getDateInUTC = (currentDate, daysToIncrement = 0) => {
+export const getDateInUTC = (currentDate, daysToIncrement = 0) => {
     currentDate.setDate(currentDate.getDate() + daysToIncrement);
     currentDate.setUTCHours(7, 0, 0, 0);
     return currentDate;
@@ -23,7 +23,7 @@ const formatResult = (res) => {
     }
 }
 
-const getSafeIntervals = (data, peaks) => {
+export const getSafeIntervals = (data, peaks) => {
     const intervals = new Array();
     if (peaks[0] > 1) {
         intervals.push(
@@ -51,5 +51,3 @@ const getSafeIntervals = (data, peaks) => {
     }
     return intervals;
 }
-
-module.exports = { getDateInUTC, getSafeIntervals };
