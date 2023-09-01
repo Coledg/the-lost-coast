@@ -9,12 +9,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'dist')));
 
 app.get('/tide-level', async (req, res) => {
-    await populateData();
+    // await populateData();
     res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 })
 
 app.get('/input', async (req, res) => {
-    res.render('input');
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 })
 
 app.get('/retrieve-data', async (req, res) => {
