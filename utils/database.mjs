@@ -1,5 +1,5 @@
-import { connect } from 'mongoose';
-connect('mongodb://127.0.0.1:27017/tidal-data');
+import mongoose from 'mongoose';
+mongoose.connect('mongodb://127.0.0.1:27017/tidal-data');
 import { Tidelevel } from '../models/tidelevel.mjs';
 import { shelterCoveID, tidalDataGetter } from './fetch.mjs';
 import { getDateInUTC } from './general.mjs';

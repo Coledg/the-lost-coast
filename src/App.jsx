@@ -1,39 +1,40 @@
 import { useState } from 'react'
-import FetchForm from './FetchForm'
-import TidalForm from './TidalForm';
-import DisplayForm from './DisplayForm';
+import Home from './pages/Home'
+import Filters from './pages/Filters';
+import Display from './pages/Display';
 import './App.css'
 
-
 const pages = {
-  fetch: 0,
-  intervals: 1,
+  home: 0,
+  filters: 1,
   display: 2
 }
 
-
 function App() {
-  const [page, setPage] = useState(pages.fetch);
-  const [query, setQuery] = useState({ startDate: "", endDate: "" });
+  const [page, setPage] = useState(pages.home);
+  const [range, setRange] = useState({ startDate: "", endDate: "" });
+  const [data, setData] = useState(new Array());
   const changePage = (page) => {
     setPage(page);
   }
 
-  const getTimeInterval = (interval) => {
-    setQuery(curr => {
+  const getTimeInterval = (requestedRange, requestedData) => {
+    setRange(curr => {
       return {
-        ...interval
+        ...requestedRange
       }
     })
+    setData(curr => requestedData);
     changePage(pages.display)
   }
 
   return (
-    <>
-      {page === pages.fetch && <FetchForm clickFunc={() => changePage(pages.intervals)} />}
-      {page === pages.intervals && <TidalForm submitFunc={getTimeInterval} />}
-      {page === pages.display && <DisplayForm query={query} />}
-    </>
+    <main>
+      {page === pages.home && <Home clickFunc={() => changePage(pages.filters)} />}
+      {page === pages.filters && <Filters submitFunc={getTimeInterval} />}
+      {page === pages.display && <Display requestFunc={() => changePage(pages.filters)}
+        range={range} data={data} />}
+    </main>
   )
 }
 

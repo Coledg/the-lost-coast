@@ -1,5 +1,5 @@
 import { useState } from "react";
-export default function TidalForm({ submitFunc }) {
+export default function Filters({ submitFunc }) {
     const [formData, setFormData] = useState({ startDate: "", endDate: "" })
     const handleChange = (evt) => {
         setFormData(data => {
@@ -9,12 +9,18 @@ export default function TidalForm({ submitFunc }) {
             }
         })
     }
-    const submitHandler = (evt) => {
+    const submitHandler = async (evt) => {
         evt.preventDefault();
-        submitFunc(formData);
+        const fetchURL = 'http://localhost:3000/retrieve-data?';
+        const data = await fetch(fetchURL + new URLSearchParams({
+            startDate: formData.startDate,
+            endDate: formData.endDate
+        }))
+        const parsedData = await data.json();
+        submitFunc(formData, parsedData);
     }
     return (
-        <div className="TidalForm">
+        <div className="Filters">
             <form onSubmit={submitHandler}>
                 <div>
                     <label htmlFor="startDate">Start date</label>
