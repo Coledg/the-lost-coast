@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 mongoose.connect('mongodb://127.0.0.1:27017/tidal-data');
 import { Tidelevel } from '../models/tidelevel.mjs';
 import { shelterCoveID, tidalDataGetter } from './fetch.mjs';
-import { getDateInUTC } from './general.mjs';
+import { getDateInUTC, formatTimeToStr, convertFromMs } from './general.mjs';
 
 export const populateData = async () => {
     const beginDate = new Date();
@@ -25,7 +25,7 @@ export const retrieveSafePassingTime = async (startDate, endDate) => {
 export const groupDataByRange = (data, numOfDays = 3) => {
     const endDate = getDateInUTC(new Date(data[data.length - 1].start), 2 - numOfDays);
     const intervals = new Array();
-    for (let i = 0; new Date(data[i].end) < endDate;) {
+    for (let i = 0; new Date(data[i].start) < endDate;) {
         const endIntervalDate = getDateInUTC(new Date(data[i].start), numOfDays);
 
         const miniIntervals = new Array();
@@ -33,6 +33,10 @@ export const groupDataByRange = (data, numOfDays = 3) => {
             if (new Date(data[j].end) > endIntervalDate) {
                 const filtered = { ...data[j] };
                 filtered.end = endIntervalDate.toLocaleString();
+                const startTime = new Date(filtered.start);
+                const endTime = new Date(filtered.end);
+                filtered.time = endTime - startTime;
+                filtered.time = formatTimeToStr(convertFromMs(filtered.time))
                 miniIntervals.push(filtered);
             } else {
                 miniIntervals.push(data[j]);
