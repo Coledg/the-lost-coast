@@ -1,45 +1,70 @@
+import Box from '@mui/material/Box';
+import { Button } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers';
+
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { useState } from "react";
+
 export default function Filters({ submitFunc }) {
-    const [formData, setFormData] = useState({ startDate: "", endDate: "" })
-    const handleChange = (evt) => {
-        setFormData(data => {
-            return {
-                ...data,
-                [evt.target.name]: evt.target.value
-            }
-        })
-    }
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
     const submitHandler = async (evt) => {
         evt.preventDefault();
+        const requestedStart = startDate.toLocaleDateString('en-CA');
+        const requestedEnd = endDate.toLocaleDateString('en-CA');
         const fetchURL = 'http://localhost:3000/retrieve-data?';
         const data = await fetch(fetchURL + new URLSearchParams({
-            startDate: formData.startDate,
-            endDate: formData.endDate
+            startDate: requestedStart,
+            endDate: requestedEnd
         }))
         const parsedData = await data.json();
-        submitFunc(formData, parsedData);
+        submitFunc({ requestedStart, requestedEnd }, parsedData);
     }
     return (
-        <div className="Filters">
+        <Box
+            sx={{
+                width: 300,
+                height: 350,
+                border: '1px solid',
+                p: 5,
+                m: 10,
+                textAlign: 'center',
+                borderColor: 'primary.main',
+                borderRadius: '10px',
+                color: 'black',
+                bgcolor: '#fafafa'
+            }}
+            className="Filters">
+            <h2>Find safe passing times for given dates</h2>
+            <p>Please specify a time range you would like the trip to take place in. </p>
             <form onSubmit={submitHandler}>
-                <div>
-                    <label htmlFor="startDate">Start date</label>
-                    <input
-                        type="date"
-                        name="startDate"
-                        id="startDate"
-                        onChange={handleChange} />
-                </div>
-                <div>
-                    <label htmlFor="endDate">End date</label>
-                    <input
-                        type="date"
-                        name="endDate"
-                        id="endDate"
-                        onChange={handleChange} />
-                </div>
-                <button>Get Intervals</button>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <DatePicker
+                        sx={{ pb: 2 }}
+                        className="white"
+                        label="Start date"
+                        value={startDate}
+                        onChange={(newStartDate) => setStartDate(newStartDate)}
+                    />
+                </LocalizationProvider>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <DatePicker
+                        sx={{ pb: 2 }}
+                        className="white"
+                        label="End date"
+                        value={endDate}
+                        onChange={(newEndDate) => setEndDate(newEndDate)}
+                    />
+                </LocalizationProvider>
+                <Button
+                    variant="contained"
+                    size="large"
+                    onClick={submitHandler}
+                >
+                    Get Intervals
+                </Button>
             </form>
-        </div>
+        </Box>
     );
 }

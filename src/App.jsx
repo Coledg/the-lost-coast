@@ -12,18 +12,15 @@ const pages = {
 
 function App() {
   const [page, setPage] = useState(pages.home);
-  const [range, setRange] = useState({ startDate: "", endDate: "" });
+  const [range, setRange] = useState({ requestedStart: "", requestedEnd: "" });
   const [data, setData] = useState(new Array());
   const changePage = (page) => {
     setPage(page);
   }
 
   const getTimeInterval = (requestedRange, requestedData) => {
-    setRange(curr => {
-      return {
-        ...requestedRange
-      }
-    })
+    console.log(requestedRange);
+    setRange(requestedRange);
     setData(curr => requestedData);
     changePage(pages.display)
   }
