@@ -2,8 +2,7 @@ import express from 'express';
 const app = express();
 import path from 'path';
 const __dirname = path.resolve();
-import { populateData, retrieveSafePassingTime, findIntervals, groupDataByRange } from './utils/database.mjs';
-import { getSafeIntervals } from './utils/general.mjs';
+import { populateData, getDateIntervalsForRange } from './utils/database.mjs';
 import cors from 'cors';
 
 app.use(cors());
@@ -18,11 +17,8 @@ app.get('/tide-level', async (req, res) => {
 
 app.get('/retrieve-data', async (req, res) => {
     const { startDate, endDate } = req.query;
-    const data = await retrieveSafePassingTime(startDate, endDate);
-    const peaks = findIntervals(data);
-    const intervals = getSafeIntervals(data, peaks);
-    const groupedIntervals = groupDataByRange(intervals);
-    res.send(groupedIntervals);
+    const data = await getDateIntervalsForRange(startDate, endDate);
+    res.send(data);
 })
 
 app.listen(3000, () => {

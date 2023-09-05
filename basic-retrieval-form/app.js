@@ -4,7 +4,6 @@ const endDateElm = document.getElementById('endDate');
 const shelterCoveID = '9418024';
 
 form.addEventListener('submit', (event) => {
-    console.log('hello')
     event.preventDefault();
     tidalDataGetter(
         shelterCoveID,

@@ -25,7 +25,7 @@ export default function Home({ clickFunc }) {
             sx={{
                 width: 300,
                 height: 300,
-                border: '1px solid',
+                border: '3px solid',
                 p: 5,
                 m: 10,
                 textAlign: 'center',
@@ -40,7 +40,7 @@ export default function Home({ clickFunc }) {
                 reported by the NOAA's Shelter Cove
                 station (ID 9418024) for California's
                 Lost Coast trail on a 15 minutes
-                intervals from start date to end date </p>
+                intervals for the requested range. </p>
 
             {isRetrieved === false &&
                 <LoadingButton
@@ -61,7 +61,7 @@ export default function Home({ clickFunc }) {
                     View Data
                 </Button>
             }
-            <p style={{ transition: "0.5s opacity", opacity: isRetrieving ? 1 : 0 }}>Retrieving Data...</p>
+            <p style={{ transition: "0.25s opacity", opacity: isRetrieving ? 1 : 0 }}>Retrieving Data...</p>
 
         </Box>
     );

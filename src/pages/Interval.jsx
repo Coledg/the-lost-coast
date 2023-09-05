@@ -13,15 +13,17 @@ export default function Interval({ interval }) {
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                 >
-                    <Typography><b>{interval[0].start.slice(0, interval[0].start.indexOf(','))} - {interval[interval.length
-                        - 1].start.slice(0, interval[interval.length - 1].start.indexOf(','))}</b>
+                    <Typography><b>{interval[0].start.slice(0, 10)} - {interval[interval.length
+                        - 1].start.slice(0, 10)}</b>
                     </Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    {interval.map((i, idx) =>
-                        <Typography key={idx}>
-                            {i.start} - {i.end} - Duration: {i.time}
-                        </Typography>)}
+                    <ul>
+                        {interval.map((i, idx) =>
+                            <Typography key={idx}>
+                                <li>{i.start} - {i.end} - Duration: {i.time}</li>
+                            </Typography>)}
+                    </ul>
                 </AccordionDetails>
             </Accordion>
         </div>

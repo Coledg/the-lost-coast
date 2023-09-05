@@ -19,8 +19,12 @@ function App() {
   }
 
   const getTimeInterval = (requestedRange, requestedData) => {
-    console.log(requestedRange);
-    setRange(requestedRange);
+    const startDate = new Date(requestedRange.requestedStart);
+    const endDate = new Date(requestedRange.requestedEnd);
+    endDate.setDate(endDate.getDate() - 1);
+    const formattedStart = startDate.toISOString().slice(0, 10);
+    const formattedEnd = endDate.toISOString().slice(0, 10);
+    setRange({ requestedStart: formattedStart, requestedEnd: formattedEnd });
     setData(curr => requestedData);
     changePage(pages.display)
   }

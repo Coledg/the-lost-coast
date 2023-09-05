@@ -7,7 +7,7 @@ export default function Display({ requestFunc, range, data }) {
         <Box
             sx={{
                 flexGrow: 1,
-                border: '1px solid',
+                border: '3px solid',
                 p: 5,
                 m: 10,
                 textAlign: 'center',
